@@ -2,9 +2,6 @@ import Head from "next/head";
 import ReactMarkdown from "react-markdown";
 
 import { Post as PostModel } from "@/core/models";
-import config from "@/config";
-
-import { Subscription } from "@/components";
 import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
 

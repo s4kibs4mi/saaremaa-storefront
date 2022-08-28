@@ -1,5 +1,4 @@
-import config from '../config.json';
-import { Integrations } from '@/core/typings';
+import config from "../config.json";
 
 interface Config {
   name: string;
@@ -12,7 +11,6 @@ interface Config {
     success: string;
     error: string;
   };
-  integration: Integrations;
 }
 
 export default config as Config;
