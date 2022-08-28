@@ -1,30 +1,30 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
+import Head from "next/head";
+import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 
-import { Post } from '@/core/models';
-import { API } from '@/core/api';
-import config from '@/config';
+import { Post } from "@/core/models";
+import { Shopemaa } from "@/core/shopemaa";
+import { Shop } from "@/core/models/shop";
 
-const Home = ({ posts }: { posts: Post[] }) => {
-  const [first] = posts;
+const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
+  const [firstPost] = posts;
 
   return (
     <>
       <Head>
-        <title>{config.title}</title>
+        <title>{shop.title}</title>
       </Head>
 
-      {first && (
+      {firstPost && (
         <div className="container first-container">
           <div className="jumbotron jumbotron-fluid mb-3 pt-0 pb-0 bg-lightblue position-relative">
             <div className="pl-4 pr-0 h-100 tofront">
               <div className="row justify-content-between">
                 <div className="col-md-6 pt-6 pb-6 align-self-center">
-                  <h1 className="secondfont mb-3 font-weight-bold">{first.title}</h1>
-                  <ReactMarkdown source={first.shortBody} className="mb-3" />
-                  <Link href={`/post/${first.slug}`}>
-                    <a href={`/post/${first.slug}`} className="btn btn-dark">
+                  <h1 className="secondfont mb-3 font-weight-bold">{firstPost.title}</h1>
+                  <ReactMarkdown source={decodeURIComponent(firstPost.content).substring(0, 120)} className="mb-3" />
+                  <Link href={`/post/${firstPost.slug}`}>
+                    <a href={`/post/${firstPost.slug}`} className="btn btn-dark">
                       Read More
                     </a>
                   </Link>
@@ -32,9 +32,9 @@ const Home = ({ posts }: { posts: Post[] }) => {
                 <div
                   className="col-md-6 d-none d-md-block pr-0"
                   style={{
-                    backgroundImage: `url(${first.heroImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center center',
+                    backgroundImage: `url(${firstPost.bannerImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center center"
                   }}
                 ></div>
               </div>
@@ -60,33 +60,37 @@ const Home = ({ posts }: { posts: Post[] }) => {
                         </a>
                       </Link>
                     </h2>
-                    <ReactMarkdown source={post.shortBody} />
+                    <ReactMarkdown source={decodeURIComponent(firstPost.content).substring(0, 200)} />
                     <div className="card-text text-muted small">
-                      {post.author.name} in {post.category.name}
+                      {shop.name}
                     </div>
                     <small className="text-muted">
-                      {post.publishedAt} &middot; {post.readingTime}
+                      {post.createdAt} &middot; 1min
                     </small>
                   </div>
-                  <img height="120" src={post.heroImage} alt={post.title} />
+                  <img height="120" src={post.bannerImage} alt={post.title} />
                 </div>
               );
             })}
           </div>
         </div>
+
+        <a href={``} className="btn btn-primary mt-3">
+          Load More
+        </a>
       </div>
     </>
   );
 };
 
 export const getStaticProps = async () => {
-  const apiRef = new API();
-  const posts = await apiRef.getPosts();
+  const postsResp = await Shopemaa.Api().blogPosts(1, 100);
+  const posts = postsResp.data.data.blogPosts;
   return {
     props: {
-      posts,
+      posts
     },
-    revalidate: 1,
+    revalidate: 1
   };
 };
 
