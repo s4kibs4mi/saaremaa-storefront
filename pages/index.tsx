@@ -60,12 +60,12 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
                         </a>
                       </Link>
                     </h2>
-                    <ReactMarkdown source={decodeURIComponent(firstPost.content).substring(0, 200)} />
+                    <ReactMarkdown source={decodeURIComponent(post.content).substring(0, 200)} />
                     <div className="card-text text-muted small">
                       {shop.name}
                     </div>
                     <small className="text-muted">
-                      {post.createdAt} &middot; 1min
+                      {post.createdAt} &middot; {(decodeURIComponent(post.content).length / 300).toFixed(0)} mins
                     </small>
                   </div>
                   <img height="120" src={post.bannerImage} alt={post.title} />
