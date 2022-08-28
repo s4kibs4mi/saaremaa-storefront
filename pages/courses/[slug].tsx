@@ -5,8 +5,28 @@ import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
 import { Course } from "@/core/models/course";
 import Link from "next/link";
+import { DigitalContent } from "@/core/models/digital_content";
+import React, { useState } from "react";
+
+import DigitalContentViewer from "../../components/content_viewer";
 
 const CourseDetails = ({ shop, course }: { course: Course, shop: Shop }) => {
+  const [selectedContent, setSelectedContent] = useState(undefined);
+
+  const getIconByType = (c: DigitalContent) => {
+    if (c.contentType === "Video") {
+      return "fa fa-video";
+    } else if (c.contentType === "Text") {
+      return "fa fa-book";
+    } else {
+      return "fa fa-download";
+    }
+  };
+
+  const showContentByType = (c: DigitalContent) => {
+    setSelectedContent(c);
+  };
+
   return (
     <>
       <Head>
@@ -34,7 +54,7 @@ const CourseDetails = ({ shop, course }: { course: Course, shop: Shop }) => {
                     </a>
                   </Link>
                 </div>
-                
+
                 <div
                   className="col-md-6 d-none d-md-block pr-0"
                   style={{
@@ -51,29 +71,46 @@ const CourseDetails = ({ shop, course }: { course: Course, shop: Shop }) => {
 
       <div className="container pt-4">
         <div className="row justify-content-between">
+          <DigitalContentViewer content={selectedContent} />
+
           <div className="col-md-12">
             <h5 className="font-weight-bold spanborder">
               <span>All Topics</span>
             </h5>
-            {course.digitalItems.map((item) => {
-              return (
-                <div key={item.id} className="mb-3 d-flex justify-content-between">
-                  <div className="pr-3">
-                    <h2 className="mb-1 h4 font-weight-bold">
-                      <Link href={`/courses/${item.id}`}>
-                        <a href={`/courses/${item.id}`} className="text-dark">
-                          {item.title}
-                        </a>
-                      </Link>
-                    </h2>
-                    <ReactMarkdown source={decodeURIComponent(item.description)} />
-                    <small className="text-muted">
-                      {item.contents.length} contents
-                    </small>
+            {course.digitalItems.length > 0 && course.digitalItems
+              .sort((a, b) => a.position - b.position)
+              .map(item => {
+                return (
+                  <div key={item.id} className="mb-3 d-flex justify-content-between">
+                    <div className="pr-3">
+                      <h2 className="mb-1 h4 font-weight-bold">
+                        <span>
+                          <a className="text-dark">
+                            {item.title}
+                          </a>
+                        </span>
+                      </h2>
+
+                      <ReactMarkdown source={decodeURIComponent(item.description)} />
+                      <small className="text-muted">
+                        {item.contents.length} contents
+                      </small>
+
+                      {item.contents.length > 0 && item.contents
+                        .sort((a, b) => a.position - b.position)
+                        .map(content => (
+                          <li style={{ listStyle: "none" }}>
+                            <i className={getIconByType(content)} />&nbsp;&nbsp;
+                            {content.isTrialAllowed ? <i className={"fa fa-unlock"} /> : <i
+                              className={"fa fa-lock"} />}&nbsp;&nbsp;
+                            <span className={"text-primary"}
+                                  onClick={() => showContentByType(content)}>{content.title}</span>
+                          </li>
+                        ))}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 {
-  "name": "next-medium-blog-boilerplate",
+  "name": "saaremaa-storefront",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -14,14 +14,19 @@
     "lint": "eslint '{pages,components,config,core}/**/*.{js,ts,tsx}' --quiet"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.2",
     "axios": "^0.27.2",
     "bootstrap": "^4.4.1",
     "contentful": "^7.14.2",
     "dayjs": "^1.8.24",
+    "markdown-it": "^13.0.1",
     "next": "^9.5.4",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
+    "react-bootstrap": "^2.5.0",
     "react-dom": "^16.13.1",
     "react-markdown": "^4.3.1",
+    "react-player": "^2.10.1",
+    "react-responsive-modal": "^6.2.0",
     "reading-time": "^1.2.0",
     "rollbar": "^2.25.1"
   },

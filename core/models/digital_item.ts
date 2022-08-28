@@ -1,6 +1,9 @@
+import { DigitalContent } from "@/core/models/digital_content";
+
 export interface DigitalItem {
   id: string;
   title: string;
   description: string;
-  contents: DigitalItem[];
+  contents: DigitalContent[];
+  position: number;
 }

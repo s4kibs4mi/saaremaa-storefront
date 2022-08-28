@@ -95,7 +95,7 @@ export class Shopemaa {
   }
 
   product_by_slug(slug) {
-    let query = `query { productBySlug(productSlug: "${slug}") { id name slug description sku stock maxItemPerOrder price productSpecificDiscount productUnit images fullImages isDigitalProduct views createdAt updatedAt attributes { id name values isRequired createdAt updateAt } variations { id name price sku stock } digitalItems { id title description contents { id title contentType isTrialAllowed contentText contentUrl updatedAt } } feedbacks { rating comment createdAt } category { id name } } }`;
+    let query = `query { productBySlug(productSlug: "${slug}") { id name slug description sku stock maxItemPerOrder price productSpecificDiscount productUnit images fullImages isDigitalProduct views createdAt updatedAt attributes { id name values isRequired createdAt updateAt } variations { id name price sku stock } digitalItems { id title description position contents { id title contentType isTrialAllowed contentText contentUrl position updatedAt } } feedbacks { rating comment createdAt } category { id name } } }`;
     return this._send_request(query);
   }
 

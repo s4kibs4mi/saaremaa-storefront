@@ -6,4 +6,5 @@ export interface DigitalContent {
   contentText: string;
   contentUrl: string;
   updatedAt: string;
+  position: number;
 }
