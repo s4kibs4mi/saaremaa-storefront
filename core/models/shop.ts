@@ -7,4 +7,5 @@ export interface Shop {
   bannerImage: string;
   content: string;
   createdAt: string;
+  currency: string;
 }

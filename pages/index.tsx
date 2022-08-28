@@ -23,8 +23,8 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
                 <div className="col-md-6 pt-6 pb-6 align-self-center">
                   <h1 className="secondfont mb-3 font-weight-bold">{firstPost.title}</h1>
                   <ReactMarkdown source={decodeURIComponent(firstPost.content).substring(0, 120)} className="mb-3" />
-                  <Link href={`/post/${firstPost.slug}`}>
-                    <a href={`/post/${firstPost.slug}`} className="btn btn-dark">
+                  <Link href={`/posts/${firstPost.slug}`}>
+                    <a href={`/posts/${firstPost.slug}`} className="btn btn-dark">
                       Read More
                     </a>
                   </Link>
@@ -54,8 +54,8 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
                 <div key={post.slug} className="mb-3 d-flex justify-content-between">
                   <div className="pr-3">
                     <h2 className="mb-1 h4 font-weight-bold">
-                      <Link href={`/post/${post.slug}`}>
-                        <a href={`/post/${post.slug}`} className="text-dark">
+                      <Link href={`/posts/${post.slug}`}>
+                        <a href={`/posts/${post.slug}`} className="text-dark">
                           {post.title}
                         </a>
                       </Link>
