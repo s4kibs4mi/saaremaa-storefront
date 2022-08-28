@@ -12,7 +12,7 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
   return (
     <>
       <Head>
-        <title>{shop.title}</title>
+        <title>{shop.name} - {shop.title}</title>
       </Head>
 
       {firstPost && (
