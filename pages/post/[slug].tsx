@@ -1,29 +1,29 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
+import Head from "next/head";
+import ReactMarkdown from "react-markdown";
 
-import { Post as PostModel } from '@/core/models';
-import config from '@/config';
-import { API } from '@/core/api';
+import { Post as PostModel } from "@/core/models";
+import config from "@/config";
 
-import { Subscription } from '@/components';
+import { Subscription } from "@/components";
+import { Shopemaa } from "@/core/shopemaa";
+import { Shop } from "@/core/models/shop";
 
-const Post = ({ post }: { post: PostModel }) => {
+const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
   return (
     <>
       <Head>
         <title>
-          {post.title} - {config.title}
+          {post.title} - {shop.name}
         </title>
-        <meta property="og:title" content={`${post.title} - ${config.title}`} />
-        <meta property="og:site_name" content={config.domain} />
-        <meta property="og:url" content={`https://${config.domain}/post/${post.slug}`} />
+        <meta property="og:title" content={`${post.title} - ${shop.name}`} />
+        {/*<meta property="og:site_name" content={config.domain} />*/}
+        {/*<meta property="og:url" content={`https://${config.domain}/post/${post.slug}`} />*/}
         <meta property="og:type" content="website" />
-        <meta property="og:image" content={post.heroImage} />
-        <meta property="og:description" content={post.shortBody} />
+        <meta property="og:image" content={post.bannerImage} />
+        <meta property="og:description" content={decodeURIComponent(post.content).substring(0, 120)} />
         <meta name="twitter:title" content={post.title} />
-        <meta name="twitter:description" content={post.shortBody} />
-        <meta name="twitter:image" content={post.heroImage} />
+        <meta name="twitter:description" content={decodeURIComponent(post.content).substring(0, 120)} />
+        <meta name="twitter:image" content={post.bannerImage} />
         <meta name="twitter:card" content="summary_large_image"></meta>
         <script async src="//static.addtoany.com/menu/page.js"></script>
       </Head>
@@ -34,35 +34,35 @@ const Post = ({ post }: { post: PostModel }) => {
             <div className="row justify-content-between">
               <div className="col-md-6 pt-6 pb-6 pr-6 align-self-center">
                 <p className="text-uppercase font-weight-bold">
-                  <Link href={`/category/${post.category.slug}`}>
-                    <a href={`/category/${post.category.slug}`} className="text-danger">
-                      {post.category.name}
-                    </a>
-                  </Link>
+                  {/*<Link href={`/category/${post.category.slug}`}>*/}
+                  {/*  <a href={`/category/${post.category.slug}`} className="text-danger">*/}
+                  {/*    {post.category.name}*/}
+                  {/*  </a>*/}
+                  {/*</Link>*/}
                 </p>
                 <h1 className="display-4 secondfont mb-3 font-weight-bold">{post.title}</h1>
-                <ReactMarkdown source={post.shortBody} className="mb-3" />
+                <ReactMarkdown source={decodeURIComponent(post.content).substring(0, 120)} className="mb-3" />
                 <div className="d-flex align-items-center">
                   <img
                     className="rounded-circle"
-                    src={post.author.photo}
+                    src={shop.logo}
                     width="70"
                     height="70"
-                    style={{ objectFit: 'cover' }}
-                    alt={post.author.name}
+                    style={{ objectFit: "cover" }}
+                    alt={shop.name}
                   />
                   <small className="ml-2">
-                    {post.author.name}{' '}
+                    {shop.name}{" "}
                     <span className="text-muted d-block">
-                      {post.publishedAt} &middot; {post.readingTime}
+                      {post.createdAt} &middot; {(decodeURIComponent(post.content).length / 300).toFixed(0)} mins
                     </span>
                   </small>
                 </div>
               </div>
               <div className="col-md-6 pr-0">
                 <img
-                  src={post.heroImage}
-                  style={{ objectFit: 'cover', height: '100%', width: '100%' }}
+                  src={post.bannerImage}
+                  style={{ objectFit: "cover", height: "100%", width: "100%" }}
                   alt={post.title}
                 />
               </div>
@@ -85,7 +85,7 @@ const Post = ({ post }: { post: PostModel }) => {
                 <a class="a2a_button_facebook"></a>
                 <a class="a2a_button_twitter"></a>
                 <a class="a2a_button_email"></a>
-              `,
+              `
                   }}
                 ></div>
               </div>
@@ -93,9 +93,9 @@ const Post = ({ post }: { post: PostModel }) => {
           </div>
           <div className="col-md-12 col-lg-8">
             <article className="article-post">
-              <ReactMarkdown source={post.body} />
+              <ReactMarkdown source={decodeURIComponent(post.content)} />
             </article>
-            {config.subscription.enabled && <Subscription />}
+            {/*{config.subscription.enabled && <Subscription />}*/}
           </div>
         </div>
       </div>
@@ -103,24 +103,14 @@ const Post = ({ post }: { post: PostModel }) => {
   );
 };
 
-export const getStaticPaths = async () => {
-  const apiRef = new API();
-  const slugs = await apiRef.getPostsPaths();
-  return {
-    paths: slugs.map((slug) => `/post/${slug}`),
-    fallback: false,
-  };
-};
-
-export const getStaticProps = async ({ params }) => {
-  const apiRef = new API();
-  const post = await apiRef.getPostBySlug(params.id);
+export async function getServerSideProps(ctx) {
+  const postResp = await Shopemaa.Api().blogPostBySlug(ctx.query.slug);
+  const post = postResp.data.data.blogPostBySlug;
   return {
     props: {
-      post,
-    },
-    revalidate: 1,
+      post
+    }
   };
-};
+}
 
 export default Post;
