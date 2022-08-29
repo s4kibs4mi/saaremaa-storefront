@@ -3,14 +3,18 @@ import ReactMarkdown from "react-markdown";
 
 import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
-import { Course } from "@/core/models/course";
+import { Course, IsCoursePurchased } from "@/core/models/course";
 import Link from "next/link";
 import { DigitalContent } from "@/core/models/digital_content";
 import React, { useState } from "react";
 
 import DigitalContentViewer from "../../components/content_viewer";
 
-const CourseDetails = ({ shop, course }: { course: Course, shop: Shop }) => {
+const CourseDetails = ({
+                         shop,
+                         course,
+                         isCoursePurchased
+                       }: { course: Course, shop: Shop, isCoursePurchased: IsCoursePurchased }) => {
   const [selectedContent, setSelectedContent] = useState(undefined);
 
   const getIconByType = (c: DigitalContent) => {
@@ -24,6 +28,10 @@ const CourseDetails = ({ shop, course }: { course: Course, shop: Shop }) => {
   };
 
   const showContentByType = (c: DigitalContent) => {
+    if (!c.isTrialAllowed) {
+      return;
+    }
+
     setSelectedContent(c);
   };
 
@@ -42,17 +50,21 @@ const CourseDetails = ({ shop, course }: { course: Course, shop: Shop }) => {
                   <h1 className="secondfont mb-3 font-weight-bold">{course.name}</h1>
                   <ReactMarkdown source={decodeURIComponent(course.description).substring(0, 120)}
                                  className="mb-3" />
-                  <span>
+                  {!isCoursePurchased.isPurchased && (
+                    <>
+                      <span>
                     <a href={``} className="btn btn-white">
                       {course.price === 0 ? "Free" : `${(course.price / 100).toFixed(2)} ${shop.currency}`}
                     </a>
                   </span>&nbsp;
 
-                  <Link href={`/courses/${course.slug}`}>
-                    <a href={`/courses/${course.slug}`} className="btn btn-dark">
-                      {course.price === 0 ? "Enroll" : "Buy"}
-                    </a>
-                  </Link>
+                      <Link href={`/courses/${course.slug}`}>
+                        <a href={`/courses/${course.slug}`} className="btn btn-dark">
+                          {course.price === 0 ? "Enroll" : "Buy"}
+                        </a>
+                      </Link>
+                    </>
+                  )}
                 </div>
 
                 <div
@@ -121,9 +133,18 @@ const CourseDetails = ({ shop, course }: { course: Course, shop: Shop }) => {
 export async function getServerSideProps(ctx) {
   const courseResp = await Shopemaa.Api().product_by_slug(ctx.query.slug);
   const course = courseResp.data.data.productBySlug;
+  const isCoursePurchasedResp = await Shopemaa.Api().isCoursePurchased(course.id);
+  let isCoursePurchased = {
+    isPurchased: false
+  };
+  if (isCoursePurchasedResp.data.data !== null) {
+    isCoursePurchased = isCoursePurchasedResp.data.data.isDigitalProductPurchasedByCustomer;
+  }
+
   return {
     props: {
-      course
+      course,
+      isCoursePurchased
     }
   };
 }

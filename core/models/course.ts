@@ -1,6 +1,7 @@
 import { DigitalItem } from "@/core/models/digital_item";
 
 export interface Course {
+  id: string;
   name: string;
   slug: string;
   description: string;
@@ -12,4 +13,10 @@ export interface Course {
   views: number;
   createdAt: string;
   digitalItems: DigitalItem[];
+}
+
+export interface IsCoursePurchased {
+  isPurchased: boolean;
+  orderHash: string;
+  purchaseDate: string;
 }

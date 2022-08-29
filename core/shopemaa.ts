@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import Rollbar from "rollbar";
+import Keys from "@/core/keys";
 
 export class Shopemaa {
   private client: AxiosInstance;
@@ -183,6 +184,11 @@ export class Shopemaa {
     return this._send_request(query);
   }
 
+  isCoursePurchased(courseId) {
+    let query = `query { isDigitalProductPurchasedByCustomer(productId: "${courseId}") { isPurchased orderHash purchaseDate } }`;
+    return this._send_request(query);
+  }
+
   _send_request(query) {
     let reqBody = {
       "query": query
@@ -190,12 +196,27 @@ export class Shopemaa {
     return this.client.post("/query", reqBody);
   }
 
+  static setAccessToken(token) {
+    if (typeof localStorage === "undefined") {
+      return;
+    }
+    localStorage.setItem(Keys.keyAccessToken(), token);
+  }
+
+  static getAccessToken() {
+    if (typeof localStorage === "undefined") {
+      return "";
+    }
+    return localStorage.getItem(Keys.keyAccessToken()) === null ? "" : localStorage.getItem(Keys.keyAccessToken()) === null;
+  }
+
   static Api(): Shopemaa {
     return new Shopemaa({
       "api_url": process.env.NEXT_PUBLIC_URL || "https://api.shopemaa.com",
       "headers": {
         "store-key": process.env.NEXT_PUBLIC_APP_KEY,
-        "store-secret": process.env.NEXT_PUBLIC_APP_SECRET
+        "store-secret": process.env.NEXT_PUBLIC_APP_SECRET,
+        "access-token": Shopemaa.getAccessToken()
       }
     });
   }
