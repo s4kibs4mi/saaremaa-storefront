@@ -8,7 +8,7 @@ const Magic = ({ token, isValid }: { token: string, isValid: boolean }) => {
   useEffect(() => {
     if (isValid) {
       Shopemaa.setAccessToken(token);
-      router.push("/");
+      router.push("/my-account");
       return;
     }
 
