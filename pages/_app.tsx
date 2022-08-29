@@ -31,11 +31,9 @@ const CustomApp = ({
                 crossOrigin="anonymous"></script>
       </Head>
 
-      {!isErrorPage && <Nav shop={pageProps.shop} menus={pageProps.menus} />}
-
+      <Nav shop={pageProps.shop} menus={pageProps.menus} />
       <Component {...pageProps} />
-
-      {!isErrorPage && <Footer shop={pageProps.shop} />}
+      <Footer shop={pageProps.shop} />
     </>
   );
 };
@@ -53,8 +51,7 @@ CustomApp.getInitialProps = async (context) => {
     appProps.pageProps.menus = menusResp.data.data.storeMenus;
   }
 
-  const isErrorPage = context.ctx.res.statusCode === 404 || false;
-  return { ...appProps, isErrorPage };
+  return { ...appProps };
 };
 
 export default CustomApp;

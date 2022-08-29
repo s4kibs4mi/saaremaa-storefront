@@ -189,10 +189,34 @@ export class Shopemaa {
     return this._send_request(query);
   }
 
+  sendMagicLoginRequest(email) {
+    let url = "http://localhost:3000/magic?token=%s";
+    let query = `mutation { customerMagicLoginRequest(params: { email: "${email}" storefrontUrl: "${url}" }) }`;
+    return this._send_request(query);
+  }
+
+  magicLogin(token) {
+    let query = `mutation { customerMagicLogin(params: { token: "${token}" }) { accessToken refreshToken } }`;
+    return this._send_request(query);
+  }
+
+  customerProfile() {
+    let query = `query { customerProfile { email firstName lastName profilePicture phone } }`;
+    return this._send_request(query);
+  }
+
   _send_request(query) {
     let reqBody = {
       "query": query
     };
+
+    if (Shopemaa.getAccessToken() !== "") {
+      let headers = this.client.defaults.headers;
+      headers["access-token"] = Shopemaa.getAccessToken();
+      return this.client.post("/query", reqBody, {
+        headers: this.default_headers(headers)
+      });
+    }
     return this.client.post("/query", reqBody);
   }
 
@@ -207,7 +231,7 @@ export class Shopemaa {
     if (typeof localStorage === "undefined") {
       return "";
     }
-    return localStorage.getItem(Keys.keyAccessToken()) === null ? "" : localStorage.getItem(Keys.keyAccessToken()) === null;
+    return localStorage.getItem(Keys.keyAccessToken()) === null ? "" : localStorage.getItem(Keys.keyAccessToken());
   }
 
   static Api(): Shopemaa {
@@ -215,8 +239,7 @@ export class Shopemaa {
       "api_url": process.env.NEXT_PUBLIC_URL || "https://api.shopemaa.com",
       "headers": {
         "store-key": process.env.NEXT_PUBLIC_APP_KEY,
-        "store-secret": process.env.NEXT_PUBLIC_APP_SECRET,
-        "access-token": Shopemaa.getAccessToken()
+        "store-secret": process.env.NEXT_PUBLIC_APP_SECRET
       }
     });
   }

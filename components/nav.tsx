@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu } from "@/core/models/menu";
 import { Shop } from "@/core/models/shop";
+import { Shopemaa } from "@/core/shopemaa";
 
 type Props = {
   menus: Menu[];
@@ -10,6 +11,17 @@ type Props = {
 
 export const Nav = ({ shop, menus }: Props) => {
   const [navOpen, setNavOpen] = useState(false);
+  const [hideLogin, setHideLogin] = useState(false);
+
+  useEffect(() => {
+    Shopemaa.Api().customerProfile().then(res => {
+      console.log(res.data.data);
+
+      if (res.data.data !== null) {
+        setHideLogin(true);
+      }
+    });
+  });
 
   return (
     <nav className="topnav navbar navbar-expand-lg navbar-light bg-white fixed-top">
@@ -48,13 +60,24 @@ export const Nav = ({ shop, menus }: Props) => {
 
           <ul className="navbar-nav ml-auto d-flex align-items-center">
             <li className="nav-item highlight">
-              <Link href={"/login"}>
-                <a className="nav-link"
-                   onClick={() => setNavOpen(false)}
-                   href={"/login"}>
-                  Login
-                </a>
-              </Link>
+              {hideLogin && (
+                <Link href={"/my-account"}>
+                  <a className="nav-link"
+                     onClick={() => setNavOpen(false)}
+                     href={"/my-account"}>
+                    My Account
+                  </a>
+                </Link>
+              )}
+              {!hideLogin && (
+                <Link href={"/login"}>
+                  <a className="nav-link"
+                     onClick={() => setNavOpen(false)}
+                     href={"/login"}>
+                    Login
+                  </a>
+                </Link>
+              )}
             </li>
           </ul>
         </div>
