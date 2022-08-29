@@ -37,7 +37,7 @@ export const Nav = ({ shop, menus }: Props) => {
               return (
                 <li key={menu.url} className="nav-item">
                   <Link href={menu.url}>
-                    <a href={menu.url} className="nav-link">
+                    <a onClick={() => setNavOpen(false)} href={menu.url} className="nav-link">
                       {menu.name}
                     </a>
                   </Link>
@@ -50,6 +50,7 @@ export const Nav = ({ shop, menus }: Props) => {
             <li className="nav-item highlight">
               <Link href={"/login"}>
                 <a className="nav-link"
+                   onClick={() => setNavOpen(false)}
                    href={"/login"}>
                   Login
                 </a>
