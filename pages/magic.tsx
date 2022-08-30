@@ -8,7 +8,13 @@ const Magic = ({ token, isValid }: { token: string, isValid: boolean }) => {
   useEffect(() => {
     if (isValid) {
       Shopemaa.setAccessToken(token);
-      router.push("/my-account");
+      const backLink = localStorage.getItem("login_back");
+      if (backLink === null) {
+        router.push("/my-account");
+        return;
+      }
+      localStorage.removeItem("login_back");
+      router.push(backLink);
       return;
     }
 
@@ -21,8 +27,6 @@ const Magic = ({ token, isValid }: { token: string, isValid: boolean }) => {
 };
 
 export async function getServerSideProps(ctx) {
-  console.log(ctx.query.token);
-
   const loginResp = await Shopemaa.Api().magicLogin(ctx.query.token);
   if (loginResp.data.data === null) {
     return {

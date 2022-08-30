@@ -17,7 +17,7 @@ export class Shopemaa {
       accessToken: "c4fac3fcd599468dbe1880a55e802491",
       captureUncaught: true,
       captureUnhandledRejections: true,
-      environment: "nur-elearning-storefront"
+      environment: "saaremaa-storefront"
     });
   }
 
@@ -141,7 +141,7 @@ export class Shopemaa {
   }
 
   getPaymentProcessingCharge(cartId, shippingMethodId, paymentMethodId) {
-    let query = `query { checkPaymentProcessingFee(cartId: "${cartId}", shippingMethodId: "${shippingMethodId}", paymentMethodId: "${paymentMethodId}") }`;
+    let query = `query { checkPaymentProcessingFee(cartId: "${cartId}" ${shippingMethodId !== null ? `shippingMethodId: ${shippingMethodId}` : ""} paymentMethodId: "${paymentMethodId}") }`;
     return this._send_request(query);
   }
 

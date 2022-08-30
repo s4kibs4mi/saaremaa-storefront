@@ -9,13 +9,18 @@ import { DigitalContent } from "@/core/models/digital_content";
 import React, { useState } from "react";
 
 import DigitalContentViewer from "../../components/content_viewer";
+import { useRouter } from "next/router";
+import { width } from "dom-helpers";
 
 const CourseDetails = ({
                          shop,
                          course,
                          isCoursePurchased
                        }: { course: Course, shop: Shop, isCoursePurchased: IsCoursePurchased }) => {
+  const router = useRouter();
+
   const [selectedContent, setSelectedContent] = useState(undefined);
+  const [buyDisabled, setBuyDisabled] = useState(false);
 
   const getIconByType = (c: DigitalContent) => {
     if (c.contentType === "Video") {
@@ -33,6 +38,32 @@ const CourseDetails = ({
     }
 
     setSelectedContent(c);
+  };
+
+  const onBuy = () => {
+    setBuyDisabled(true);
+
+    Shopemaa.Api().customerProfile().then(resp => {
+      if (resp.data.data === null) {
+        localStorage.setItem("login_back", location.href);
+        router.push("/login");
+        return;
+      }
+
+      let query = `[{ productId: "${course.id}" quantity: ${1}}]`;
+      let params = {
+        cartItems: query
+      };
+      Shopemaa.Api().createCart(params).then(cartResp => {
+        if (cartResp.data.data === null) {
+          setBuyDisabled(false);
+          return;
+        }
+
+        const cartId = cartResp.data.data.newCart.id;
+        router.push(`/checkout/${cartId}`);
+      });
+    });
   };
 
   return (
@@ -57,12 +88,8 @@ const CourseDetails = ({
                       {course.price === 0 ? "Free" : `${(course.price / 100).toFixed(2)} ${shop.currency}`}
                     </a>
                   </span>&nbsp;
-
-                      <Link href={`/courses/${course.slug}`}>
-                        <a href={`/courses/${course.slug}`} className="btn btn-dark">
-                          {course.price === 0 ? "Enroll" : "Buy"}
-                        </a>
-                      </Link>
+                      <button onClick={() => onBuy()} disabled={buyDisabled}
+                              className="btn btn-dark">{course.price === 0 ? "Enroll" : "Buy"}</button>
                     </>
                   )}
                 </div>
