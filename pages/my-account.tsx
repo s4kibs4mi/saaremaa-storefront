@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 
 import { Shop } from "@/core/models/shop";
 import React, { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ import { useRouter } from "next/router";
 const MyAccount = ({ shop }: { shop: Shop }) => {
   const router = useRouter();
   const [customer, setCustomer] = useState(null);
+  const [myCourses, setMyCourses] = useState([]);
 
   const onLogout = () => {
     Shopemaa.setAccessToken("");
@@ -15,12 +17,22 @@ const MyAccount = ({ shop }: { shop: Shop }) => {
   };
 
   useEffect(() => {
+    if (customer !== null) {
+      return;
+    }
+
     Shopemaa.Api().customerProfile().then(resp => {
       if (resp.data.data === null) {
         router.push("/login");
         return;
       }
       setCustomer(resp.data.data.customerProfile);
+
+      Shopemaa.Api().list_orders(1, 100).then(orderResp => {
+        if (orderResp.data.data !== null) {
+          setMyCourses(orderResp.data.data.orders);
+        }
+      });
     });
   });
 
@@ -47,18 +59,23 @@ const MyAccount = ({ shop }: { shop: Shop }) => {
                 </div>
               </div>
 
-              <div className="pr-3 col-md-4 mt-4">
-                <h2 className="mb-1 h4 font-weight-bold">
-                  My Courses
-                </h2>
-                <div className={"mt-3 justify-content-between"}>
-                  <ul>
-                    <li>A</li>
-                    <li>A</li>
-                    <li>A</li>
-                  </ul>
+              {myCourses && myCourses.length > 0 && (
+                <div className="pr-3 col-md-4 mt-4">
+                  <h2 className="mb-1 h4 font-weight-bold">
+                    My Courses
+                  </h2>
+                  <div className={"mt-3 justify-content-between"}>
+                    <ul style={{ listStyle: "none" }}>
+                      {myCourses && myCourses.map((c) => (
+                        <li key={c.id}><i className={"fa fa-arrow-right"} /><Link
+                          href={`/my-courses/${c.hash}`}>
+                          <a className={"btn-sm"}>{c.cart.cartItems[0].product.name}</a>
+                        </Link></li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>

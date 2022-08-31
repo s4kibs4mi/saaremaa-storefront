@@ -3,24 +3,29 @@ import ReactMarkdown from "react-markdown";
 
 import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
-import { Course, IsCoursePurchased } from "@/core/models/course";
-import Link from "next/link";
+import { Course } from "@/core/models/course";
 import { DigitalContent } from "@/core/models/digital_content";
 import React, { useState } from "react";
 
 import DigitalContentViewer from "../../components/content_viewer";
 import { useRouter } from "next/router";
-import { width } from "dom-helpers";
+import Link from "next/link";
 
 const CourseDetails = ({
                          shop,
-                         course,
-                         isCoursePurchased
-                       }: { course: Course, shop: Shop, isCoursePurchased: IsCoursePurchased }) => {
+                         course
+                       }: { course: Course, shop: Shop }) => {
   const router = useRouter();
 
   const [selectedContent, setSelectedContent] = useState(undefined);
   const [buyDisabled, setBuyDisabled] = useState(false);
+  const [purchasedInfo, setPurchasedInfo] = useState(null);
+
+  Shopemaa.Api().isCoursePurchased(course.id).then(isPurchasedResp => {
+    if (isPurchasedResp.data.data !== null) {
+      setPurchasedInfo(isPurchasedResp.data.data.isDigitalProductPurchasedByCustomer);
+    }
+  });
 
   const getIconByType = (c: DigitalContent) => {
     if (c.contentType === "Video") {
@@ -81,7 +86,7 @@ const CourseDetails = ({
                   <h1 className="secondfont mb-3 font-weight-bold">{course.name}</h1>
                   <ReactMarkdown source={decodeURIComponent(course.description).substring(0, 120)}
                                  className="mb-3" />
-                  {!isCoursePurchased.isPurchased && (
+                  {purchasedInfo && !purchasedInfo.isPurchased && (
                     <>
                       <span>
                     <a href={``} className="btn btn-white">
@@ -92,6 +97,23 @@ const CourseDetails = ({
                               className="btn btn-dark">{course.price === 0 ? "Enroll" : "Buy"}</button>
                     </>
                   )}
+                  {purchasedInfo && purchasedInfo.isPurchased && (
+                    <>
+                      <span>
+                    <Link href={`/my-courses/${purchasedInfo.orderHash}`}>
+                      <a href={`/my-courses/${purchasedInfo.orderHash}`} className="btn btn-white">
+                      Continue course
+                    </a>
+                    </Link>
+                  </span>
+                    </>
+                  )}
+                  <br />
+                  {course && course.attributes && course.attributes.map((a) => (
+                    <>
+                      <a className={"text-secondary mt-5"}>{`[${a.name}: ${a.values[0]}]`}</a>&nbsp;
+                    </>
+                  ))}
                 </div>
 
                 <div
@@ -160,18 +182,10 @@ const CourseDetails = ({
 export async function getServerSideProps(ctx) {
   const courseResp = await Shopemaa.Api().product_by_slug(ctx.query.slug);
   const course = courseResp.data.data.productBySlug;
-  const isCoursePurchasedResp = await Shopemaa.Api().isCoursePurchased(course.id);
-  let isCoursePurchased = {
-    isPurchased: false
-  };
-  if (isCoursePurchasedResp.data.data !== null) {
-    isCoursePurchased = isCoursePurchasedResp.data.data.isDigitalProductPurchasedByCustomer;
-  }
 
   return {
     props: {
-      course,
-      isCoursePurchased
+      course
     }
   };
 }

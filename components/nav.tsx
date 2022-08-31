@@ -15,8 +15,6 @@ export const Nav = ({ shop, menus }: Props) => {
 
   useEffect(() => {
     Shopemaa.Api().customerProfile().then(res => {
-      console.log(res.data.data);
-
       if (res.data.data !== null) {
         setHideLogin(true);
       }

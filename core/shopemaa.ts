@@ -164,6 +164,21 @@ export class Shopemaa {
     return this._send_request(query);
   }
 
+  getOrder(orderHash) {
+    let query = `query { order(hash: "${orderHash}") { id hash shippingCharge paymentProcessingFee subtotal grandTotal discountedAmount status paymentStatus createdAt updatedAt billingAddress { id street streetTwo city state postcode email phone location { id name shortCode } } shippingAddress { id street streetTwo city state postcode email phone location { id name shortCode } } cart { isShippingRequired cartItems { product { id name slug description fullImages isDigitalProduct productUnit attributes { id name values isRequired createdAt updateAt } } quantity purchasePrice attributes { name selectedValue } variation { id name price sku stock } } } customer { email phone firstName lastName profilePicture } paymentMethod { id displayName currencyName currencySymbol isDigitalPayment } shippingMethod { id displayName deliveryCharge deliveryTimeInDays WeightUnit isFlat isActive } couponCode { code } payments { isPaid payableAmount gatewayName } } }`;
+    return this._send_request(query);
+  }
+
+  list_digital_items_by_customer(orderHash, productId) {
+    let query = `query { productDigitalItemsByCustomer(orderHash: "${orderHash}", productId: "${productId}") { id title description position contents { id title contentType isTrialAllowed contentText contentUrl updatedAt position } } }`;
+    return this._send_request(query);
+  }
+
+  list_orders(currentPage, limit) {
+    let query = `query { orders(sort: { by: CreatedAt direction: Desc }, pagination: { perPage: ${limit} page: ${currentPage} }) { id hash shippingCharge paymentProcessingFee subtotal grandTotal discountedAmount status paymentStatus createdAt updatedAt billingAddress { id street streetTwo city state postcode email phone location { id name shortCode } } shippingAddress { id street streetTwo city state postcode email phone location { id name shortCode } } cart { isShippingRequired cartItems { product { id name slug description fullImages isDigitalProduct productUnit } quantity purchasePrice attributes { name selectedValue } variation { id name price sku stock } } } customer { email phone firstName lastName profilePicture } paymentMethod { id displayName currencyName currencySymbol isDigitalPayment } shippingMethod { id displayName deliveryCharge deliveryTimeInDays WeightUnit isFlat isActive } couponCode { code } payments { isPaid payableAmount gatewayName } } }`;
+    return this._send_request(query);
+  }
+
   getStoreBySecret() {
     let query = `query { storeBySecret { name title description tags metaName metaDescription metaTags logo favicon bannerImage isOpen currency website supportEmail supportPhone createdAt updatedAt street streetOptional city state postcode location { id name shortCode } } }`;
     return this._send_request(query);

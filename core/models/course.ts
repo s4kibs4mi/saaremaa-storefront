@@ -13,10 +13,16 @@ export interface Course {
   views: number;
   createdAt: string;
   digitalItems: DigitalItem[];
+  attributes: CourseAttribute[];
 }
 
 export interface IsCoursePurchased {
   isPurchased: boolean;
   orderHash: string;
   purchaseDate: string;
+}
+
+export interface CourseAttribute {
+  name: string;
+  values: string[];
 }
