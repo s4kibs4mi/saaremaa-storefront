@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import config from '@/config';
+import React, { useState } from "react";
+import config from "@/config";
 
-interface AlertMeta {
+export interface AlertMeta {
   class: string;
   message: string;
 }
 
 export const Subscription = () => {
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const [blocked, setBlocked] = useState<boolean>(false);
   const [alert, setAlert] = useState<AlertMeta>();
 
@@ -16,23 +16,23 @@ export const Subscription = () => {
     setAlert(null);
     try {
       const data = await fetch(config.subscription.url, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({ email, date: new Date() }),
         headers: {
-          'Content-Type': 'application/json',
-        },
+          "Content-Type": "application/json"
+        }
       });
       const json = await data.json();
       if (json) {
         setAlert({
-          class: 'success',
-          message: config.subscription.success,
+          class: "success",
+          message: config.subscription.success
         });
       }
     } catch (e) {
       setAlert({
-        class: 'danger',
-        message: config.subscription.error,
+        class: "danger",
+        message: config.subscription.error
       });
       setBlocked(false);
     }

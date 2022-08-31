@@ -13,7 +13,7 @@ const MyAccount = ({ shop }: { shop: Shop }) => {
 
   const onLogout = () => {
     Shopemaa.setAccessToken("");
-    router.push("/login");
+    location.reload();
   };
 
   useEffect(() => {

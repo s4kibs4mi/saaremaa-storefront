@@ -10,13 +10,21 @@ import React, { useState } from "react";
 import DigitalContentViewer from "../../components/content_viewer";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { NotFound } from "@/components";
 
 const CourseDetails = ({
                          shop,
                          course
                        }: { course: Course, shop: Shop }) => {
-  const router = useRouter();
+  if (course === null) {
+    return (
+      <>
+        <NotFound />
+      </>
+    );
+  }
 
+  const router = useRouter();
   const [selectedContent, setSelectedContent] = useState(undefined);
   const [buyDisabled, setBuyDisabled] = useState(false);
   const [purchasedInfo, setPurchasedInfo] = useState(null);
@@ -181,6 +189,14 @@ const CourseDetails = ({
 
 export async function getServerSideProps(ctx) {
   const courseResp = await Shopemaa.Api().product_by_slug(ctx.query.slug);
+  if (courseResp.data.data === null) {
+    return {
+      props: {
+        course: null
+      }
+    };
+  }
+
   const course = courseResp.data.data.productBySlug;
 
   return {

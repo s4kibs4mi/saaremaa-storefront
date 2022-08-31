@@ -1,8 +1,10 @@
 import Head from "next/head";
 
 import { Shop } from "@/core/models/shop";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Shopemaa } from "@/core/shopemaa";
+import { AlertMeta } from "@/components";
+import config from "@/config";
 
 const loginParams = {
   email: ""
@@ -16,11 +18,15 @@ const createAccountParams = {
 };
 
 const Login = ({ shop }: { shop: Shop }) => {
+  const [alert, setAlert] = useState<AlertMeta>();
 
   const onLogin = () => {
     Shopemaa.Api().sendMagicLoginRequest(loginParams.email).then(res => {
       if (res.data.data) {
-        alert("Sent");
+        setAlert({
+          class: "success",
+          message: "Email sent, please check your mailbox."
+        });
         return;
       }
     });
@@ -29,6 +35,12 @@ const Login = ({ shop }: { shop: Shop }) => {
   const createAccount = () => {
 
   };
+
+  useEffect(() => {
+    setTimeout(function() {
+      setAlert(null);
+    }, 2000);
+  }, [alert]);
 
   return (
     <>
@@ -43,6 +55,11 @@ const Login = ({ shop }: { shop: Shop }) => {
               <h2 className="mb-1 h4 font-weight-bold">
                 Log In
               </h2>
+              {alert && (
+                <div className={`alert alert-${alert.class}`} role="alert">
+                  {alert.message}
+                </div>
+              )}
               <div className={"mt-3 d-flex justify-content-between"}>
                 <input onChange={(e) => {
                   loginParams.email = e.target.value;
