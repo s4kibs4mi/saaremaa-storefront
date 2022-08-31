@@ -83,6 +83,20 @@ const CourseDetails = ({
     <>
       <Head>
         <title>{course.name} - {shop.name}</title>
+
+        <meta property="og:title" content={`${course.name} - ${shop.name}`} />
+        {/*<meta property="og:site_name" content={config.domain} />*/}
+        {/*<meta property="og:url" content={`https://${config.domain}/post/${post.slug}`} />*/}
+        <meta property="og:type" content="website" />
+        <meta property="og:image"
+              content={course.fullImages && course.fullImages.length > 0 ? course.fullImages[0] : ""} />
+        <meta property="og:description" content={decodeURIComponent(course.description).substring(0, 120)} />
+        <meta name="twitter:title" content={course.name} />
+        <meta name="twitter:description" content={decodeURIComponent(course.description).substring(0, 120)} />
+        <meta name="twitter:image"
+              content={course.fullImages && course.fullImages.length > 0 ? course.fullImages[0] : ""} />
+        <meta name="twitter:card" content="summary_large_image"></meta>
+        <script async src="//static.addtoany.com/menu/page.js"></script>
       </Head>
 
       {course && (
