@@ -44,10 +44,6 @@ const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
   };
 
   const showContentByType = (c: DigitalContent) => {
-    if (!c.isTrialAllowed) {
-      return;
-    }
-
     setSelectedContent(c);
   };
 
@@ -122,8 +118,6 @@ const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
                           .map(content => (
                             <li style={{ listStyle: "none" }}>
                               <i className={getIconByType(content)} />&nbsp;&nbsp;
-                              {content.isTrialAllowed ? <i className={"fa fa-unlock"} /> : <i
-                                className={"fa fa-lock"} />}&nbsp;&nbsp;
                               <span className={"text-primary"}
                                     onClick={() => showContentByType(content)}>{content.title}</span>
                             </li>
