@@ -1,4 +1,4 @@
-export interface Page {
+export interface PageModel {
   title: string;
   slug: string;
   bannerImage: string;

@@ -5,9 +5,9 @@ import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
 import { NotFound } from "@/components";
 import React from "react";
-import { Page } from "@/core/models/page";
+import { PageModel } from "@/core/models/page";
 
-const Page = ({ shop, page }: { page: Page, shop: Shop }) => {
+const Page = ({ shop, page }: { page: PageModel, shop: Shop }) => {
   if (page === null) {
     return <NotFound shop={shop} />;
   }
