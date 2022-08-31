@@ -4,8 +4,14 @@ import ReactMarkdown from "react-markdown";
 import { Post as PostModel } from "@/core/models";
 import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
+import { NotFound } from "@/components";
+import React from "react";
 
 const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
+  if (post === null) {
+    return <NotFound shop={shop} />;
+  }
+
   return (
     <>
       <Head>
@@ -102,6 +108,14 @@ const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
 
 export async function getServerSideProps(ctx) {
   const postResp = await Shopemaa.Api().blogPostBySlug(ctx.query.slug);
+  if (postResp.data.data === null) {
+    return {
+      props: {
+        post: null
+      }
+    };
+  }
+
   const post = postResp.data.data.blogPostBySlug;
   return {
     props: {

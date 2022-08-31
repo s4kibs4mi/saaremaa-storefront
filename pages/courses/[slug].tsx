@@ -19,7 +19,7 @@ const CourseDetails = ({
   if (course === null) {
     return (
       <>
-        <NotFound />
+        <NotFound shop={shop} />
       </>
     );
   }

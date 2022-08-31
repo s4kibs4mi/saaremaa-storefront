@@ -7,8 +7,8 @@ import { Cart } from "@/core/models/cart";
 import { Location } from "@/core/models/location";
 import { PaymentMethod } from "@/core/models/payment_method";
 import { loadStripe } from "@stripe/stripe-js";
-import { router } from "next/client";
 import { useRouter } from "next/router";
+import { NotFound } from "@/components";
 
 const checkoutBillingParams = {
   street: "",
@@ -24,6 +24,10 @@ const Checkout = ({
                     locations,
                     paymentMethods
                   }: { shop: Shop, cart: Cart, locations: Location[], paymentMethods: PaymentMethod[] }) => {
+  if (cart === null) {
+    return <NotFound shop={shop} />;
+  }
+
   const [total, setTotal] = useState(0);
   const [courseFee, setCourseFee] = useState(0);
   const [discount, setDiscount] = useState(0);
@@ -227,6 +231,15 @@ export async function getServerSideProps(ctx) {
     Shopemaa.Api().list_locations(),
     Shopemaa.Api().list_payment_methods()
   ]);
+
+  if (cartResp.data.data === null) {
+    return {
+      props: {
+        cart: null
+      }
+    };
+  }
+
   const cart = cartResp.data.data.cart;
   const locations = locationsResp.data.data.locations;
   const paymentMethods = paymentMethodsResp.data.data.paymentMethods;
