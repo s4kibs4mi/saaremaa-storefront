@@ -4,7 +4,7 @@ import { Shop } from "@/core/models/shop";
 import React, { useEffect, useState } from "react";
 import { Shopemaa } from "@/core/shopemaa";
 import { AlertMeta } from "@/components";
-import config from "@/config";
+import { router } from "next/client";
 
 const loginParams = {
   email: ""
@@ -33,7 +33,17 @@ const Login = ({ shop }: { shop: Shop }) => {
   };
 
   const createAccount = () => {
-
+    Shopemaa.Api().customerRegister(createAccountParams.email, createAccountParams.password, createAccountParams.firstName, createAccountParams.lastName).then(res => {
+      if (res.data.data) {
+        setAlert({
+          class: "success",
+          message: "Account created"
+        });
+        Shopemaa.setAccessToken(res.data.data.customerRegister.accessToken);
+        router.push("/my-account");
+        return;
+      }
+    });
   };
 
   useEffect(() => {

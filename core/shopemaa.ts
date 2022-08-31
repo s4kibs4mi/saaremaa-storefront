@@ -220,6 +220,11 @@ export class Shopemaa {
     return this._send_request(query);
   }
 
+  customerRegister(email, password, firstName, lastName) {
+    let query = `mutation { customerRegister(params: { email: "${email}" password: "${password}" firstName: "${firstName}" lastName: "${lastName}" }) { customer { email phone firstName lastName profilePicture } accessToken } }`;
+    return this._send_request(query);
+  }
+
   _send_request(query) {
     let reqBody = {
       "query": query
