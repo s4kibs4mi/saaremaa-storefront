@@ -1,5 +1,4 @@
 import App from "next/app";
-import Head from "next/head";
 
 import "../styles/main.scss";
 
@@ -14,11 +13,12 @@ const CustomApp = ({
   Component: any;
   pageProps: any;
 }) => {
+  const isBrowser = typeof document !== "undefined";
   return (
     <>
-      <Nav shop={pageProps.shop} menus={pageProps.menus} />
-      <Component {...pageProps} />
-      <Footer shop={pageProps.shop} />
+      {isBrowser ? <Nav shop={pageProps.shop} menus={pageProps.menus} /> : null}
+      {isBrowser ? <Component {...pageProps} /> : null}
+      {isBrowser ? <Footer shop={pageProps.shop} /> : null}
     </>
   );
 };

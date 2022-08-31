@@ -24,6 +24,10 @@ const Checkout = ({
                     locations,
                     paymentMethods
                   }: { shop: Shop, cart: Cart, locations: Location[], paymentMethods: PaymentMethod[] }) => {
+  if (typeof document === "undefined") {
+    return <></>;
+  }
+
   if (cart === null) {
     return <NotFound shop={shop} />;
   }

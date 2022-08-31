@@ -18,6 +18,10 @@ const createAccountParams = {
 };
 
 const Login = ({ shop }: { shop: Shop }) => {
+  if (typeof document === "undefined") {
+    return <></>;
+  }
+
   const [alert, setAlert] = useState<AlertMeta>();
 
   const onLogin = () => {

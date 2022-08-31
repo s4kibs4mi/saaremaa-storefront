@@ -9,6 +9,10 @@ import React, { useEffect, useState } from "react";
 import DigitalContentViewer from "../../components/content_viewer";
 
 const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
+  if (typeof document === "undefined") {
+    return <></>;
+  }
+
   const [selectedContent, setSelectedContent] = useState(undefined);
   const [course, setCourse] = useState(null);
   const [digitalItems, setDigitalItems] = useState(null);

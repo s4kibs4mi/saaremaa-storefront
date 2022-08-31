@@ -7,13 +7,20 @@ import { Shopemaa } from "@/core/shopemaa";
 import { useRouter } from "next/router";
 
 const MyAccount = ({ shop }: { shop: Shop }) => {
+  if (typeof document === "undefined") {
+    return <></>;
+  }
+
   const router = useRouter();
   const [customer, setCustomer] = useState(null);
   const [myCourses, setMyCourses] = useState([]);
 
   const onLogout = () => {
     Shopemaa.setAccessToken("");
-    location.reload();
+
+    if (typeof location !== "undefined") {
+      location.reload();
+    }
   };
 
   useEffect(() => {

@@ -5,8 +5,13 @@ import ReactMarkdown from "react-markdown";
 import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
 import { Course } from "@/core/models/course";
+import React from "react";
 
 const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
+  if (typeof document === "undefined") {
+    return <></>;
+  }
+
   const [firstCourse] = courses;
 
   return (

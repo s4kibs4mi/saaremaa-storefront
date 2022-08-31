@@ -5,7 +5,7 @@ import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
 import { Course } from "@/core/models/course";
 import { DigitalContent } from "@/core/models/digital_content";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import DigitalContentViewer from "../../components/content_viewer";
 import { useRouter } from "next/router";
@@ -16,6 +16,10 @@ const CourseDetails = ({
                          shop,
                          course
                        }: { course: Course, shop: Shop }) => {
+  if (typeof document === "undefined") {
+    return <></>;
+  }
+
   if (course === null) {
     return (
       <>
@@ -29,10 +33,16 @@ const CourseDetails = ({
   const [buyDisabled, setBuyDisabled] = useState(false);
   const [purchasedInfo, setPurchasedInfo] = useState(null);
 
-  Shopemaa.Api().isCoursePurchased(course.id).then(isPurchasedResp => {
-    if (isPurchasedResp.data.data !== null) {
-      setPurchasedInfo(isPurchasedResp.data.data.isDigitalProductPurchasedByCustomer);
+  useEffect(() => {
+    if (purchasedInfo !== null) {
+      return;
     }
+
+    Shopemaa.Api().isCoursePurchased(course.id).then(isPurchasedResp => {
+      if (isPurchasedResp.data.data !== null) {
+        setPurchasedInfo(isPurchasedResp.data.data.isDigitalProductPurchasedByCustomer);
+      }
+    });
   });
 
   const getIconByType = (c: DigitalContent) => {

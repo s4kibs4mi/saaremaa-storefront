@@ -8,6 +8,10 @@ import React from "react";
 import { PageModel } from "@/core/models/page";
 
 const Page = ({ shop, page }: { page: PageModel, shop: Shop }) => {
+  if (typeof document === "undefined") {
+    return <></>;
+  }
+
   if (page === null) {
     return <NotFound shop={shop} />;
   }
