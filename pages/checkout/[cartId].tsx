@@ -128,7 +128,7 @@ const Checkout = ({
   return (
     <>
       <Head>
-        <title>{shop.name} - {shop.title}</title>
+        <title>Checkout - {shop.name}</title>
       </Head>
 
       <div className="container pt-4 mt-5">

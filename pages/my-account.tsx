@@ -39,7 +39,7 @@ const MyAccount = ({ shop }: { shop: Shop }) => {
   return (
     <>
       <Head>
-        <title>{shop.name} - {shop.title}</title>
+        <title>My Account - {shop.name}</title>
       </Head>
 
       <div className="container pt-4 mt-5">

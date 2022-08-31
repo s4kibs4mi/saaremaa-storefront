@@ -12,7 +12,7 @@ const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
   return (
     <>
       <Head>
-        <title>{shop.name} - Courses</title>
+        <title>Courses - {shop.name}</title>
       </Head>
 
       {firstCourse && (

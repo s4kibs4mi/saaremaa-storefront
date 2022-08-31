@@ -55,7 +55,7 @@ const Login = ({ shop }: { shop: Shop }) => {
   return (
     <>
       <Head>
-        <title>{shop.name} - {shop.title}</title>
+        <title>Login - {shop.name}</title>
       </Head>
 
       <div className="container pt-4 mt-5">
