@@ -5,10 +5,30 @@ import ReactMarkdown from "react-markdown";
 import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
 import { Course } from "@/core/models/course";
-import React from "react";
+import React, { useState } from "react";
 
 const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
+  const [currentPage, setCurrentPage] = useState(2);
+  const [hideLoadMore, setHideLoadMore] = useState(courses.length === 0);
   const [firstCourse] = courses;
+
+  const onLoadMore = () => {
+    let sort = {
+      by: "CreatedAt",
+      direction: "Desc"
+    };
+    Shopemaa.Api().list_products_with_override_sort(sort, currentPage, 8).then(coursesResp => {
+      if (coursesResp.data.data === null) {
+        return;
+      }
+
+      coursesResp.data.data.products.forEach(v => courses.push(v));
+      setCurrentPage(currentPage + 1);
+      if (coursesResp.data.data.products && coursesResp.data.data.products.length === 0) {
+        setHideLoadMore(true);
+      }
+    });
+  };
 
   return (
     <>
@@ -84,9 +104,14 @@ const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
           </div>
         </div>
 
-        <a href={``} className="btn btn-primary mt-3">
-          Load More
-        </a>
+        {!hideLoadMore && (
+          <a onClick={e => {
+            e.preventDefault();
+            onLoadMore();
+          }} className="btn btn-primary mt-3">
+            Load More
+          </a>
+        )}
       </div>
     </>
   );
@@ -97,7 +122,7 @@ export const getStaticProps = async () => {
     by: "CreatedAt",
     direction: "Desc"
   };
-  const coursesResp = await Shopemaa.Api().list_products_with_override_sort(sort, 1, 100);
+  const coursesResp = await Shopemaa.Api().list_products_with_override_sort(sort, 1, 8);
   const courses = coursesResp.data.data.products;
   return {
     props: {

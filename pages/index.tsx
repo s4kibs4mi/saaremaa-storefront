@@ -5,10 +5,26 @@ import ReactMarkdown from "react-markdown";
 import { Post } from "@/core/models";
 import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
-import React from "react";
+import React, { useState } from "react";
 
 const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
+  const [currentPage, setCurrentPage] = useState(2);
+  const [hideLoadMore, setHideLoadMore] = useState(posts.length === 0);
   const [firstPost] = posts;
+
+  const onLoadMore = () => {
+    Shopemaa.Api().blogPosts(currentPage, 8).then(postsResp => {
+      if (postsResp.data.data === null) {
+        return;
+      }
+
+      postsResp.data.data.blogPosts.forEach(v => posts.push(v));
+      setCurrentPage(currentPage + 1);
+      if (postsResp.data.data.blogPosts && postsResp.data.data.blogPosts.length === 0) {
+        setHideLoadMore(true);
+      }
+    });
+  };
 
   return (
     <>
@@ -76,16 +92,22 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
           </div>
         </div>
 
-        <a href={``} className="btn btn-primary mt-3">
-          Load More
-        </a>
+        {!hideLoadMore && (
+          <a onClick={e => {
+            e.preventDefault();
+            onLoadMore();
+          }} className="btn btn-primary mt-3">
+            Load More
+          </a>
+        )}
+
       </div>
     </>
   );
 };
 
 export const getStaticProps = async () => {
-  const postsResp = await Shopemaa.Api().blogPosts(1, 100);
+  const postsResp = await Shopemaa.Api().blogPosts(1, 8);
   const posts = postsResp.data.data.blogPosts;
   return {
     props: {
