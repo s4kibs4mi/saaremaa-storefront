@@ -8,10 +8,6 @@ import { NotFound } from "@/components";
 import React from "react";
 
 const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
-  if (typeof document === "undefined") {
-    return <></>;
-  }
-
   if (post === null) {
     return <NotFound shop={shop} />;
   }

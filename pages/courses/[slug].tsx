@@ -16,10 +16,6 @@ const CourseDetails = ({
                          shop,
                          course
                        }: { course: Course, shop: Shop }) => {
-  if (typeof document === "undefined") {
-    return <></>;
-  }
-
   if (course === null) {
     return (
       <>

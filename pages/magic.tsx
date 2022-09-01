@@ -3,10 +3,6 @@ import { Shopemaa } from "@/core/shopemaa";
 import { useRouter } from "next/router";
 
 const Magic = ({ token, isValid }: { token: string, isValid: boolean }) => {
-  if (typeof document === "undefined") {
-    return <></>;
-  }
-
   const router = useRouter();
 
   useEffect(() => {

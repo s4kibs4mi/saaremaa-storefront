@@ -8,10 +8,6 @@ import { Shop } from "@/core/models/shop";
 import React from "react";
 
 const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
-  if (typeof document === "undefined") {
-    return <></>;
-  }
-
   const [firstPost] = posts;
 
   return (

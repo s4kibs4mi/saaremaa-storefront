@@ -8,10 +8,6 @@ import { Course } from "@/core/models/course";
 import React from "react";
 
 const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
-  if (typeof document === "undefined") {
-    return <></>;
-  }
-
   const [firstCourse] = courses;
 
   return (

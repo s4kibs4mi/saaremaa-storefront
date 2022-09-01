@@ -4,7 +4,7 @@ import { Shop } from "@/core/models/shop";
 import React, { useEffect, useState } from "react";
 import { Shopemaa } from "@/core/shopemaa";
 import { AlertMeta } from "@/components";
-import { router } from "next/client";
+import { useRouter } from "next/router";
 
 const loginParams = {
   email: ""
@@ -18,11 +18,8 @@ const createAccountParams = {
 };
 
 const Login = ({ shop }: { shop: Shop }) => {
-  if (typeof document === "undefined") {
-    return <></>;
-  }
-
   const [alert, setAlert] = useState<AlertMeta>();
+  const router = useRouter();
 
   const onLogin = () => {
     Shopemaa.Api().sendMagicLoginRequest(loginParams.email).then(res => {

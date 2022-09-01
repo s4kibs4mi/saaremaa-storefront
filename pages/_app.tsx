@@ -13,12 +13,11 @@ const CustomApp = ({
   Component: any;
   pageProps: any;
 }) => {
-  const isBrowser = typeof document !== "undefined";
   return (
     <>
-      {isBrowser ? <Nav shop={pageProps.shop} menus={pageProps.menus} /> : null}
-      {isBrowser ? <Component {...pageProps} /> : null}
-      {isBrowser ? <Footer shop={pageProps.shop} /> : null}
+      <Nav shop={pageProps.shop} menus={pageProps.menus} />
+      <Component {...pageProps} />
+      <Footer shop={pageProps.shop} />
     </>
   );
 };
