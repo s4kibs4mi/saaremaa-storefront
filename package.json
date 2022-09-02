@@ -19,11 +19,14 @@
     "react": "^16.14.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^16.13.1",
-    "react-markdown": "^4.3.1",
+    "react-markdown": "^6.0.2",
     "react-player": "^2.10.1",
     "react-responsive-modal": "^6.2.0",
+    "react-syntax-highlighter": "^15.5.0",
     "reading-time": "^1.2.0",
-    "rollbar": "^2.25.1"
+    "rollbar": "^2.25.1",
+    "sweetalert2": "10.16.9",
+    "sweetalert2-react-content": "3.3.3"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.5",

@@ -6,6 +6,7 @@ import { Shop } from "@/core/models/shop";
 import { NotFound } from "@/components";
 import React from "react";
 import { PageModel } from "@/core/models/page";
+import CodeBlock from "../../components/codeblock";
 
 const Page = ({ shop, page }: { page: PageModel, shop: Shop }) => {
   if (page === null) {
@@ -47,7 +48,7 @@ const Page = ({ shop, page }: { page: PageModel, shop: Shop }) => {
         <div className="row justify-content-center">
           <div className="col-md-12 col-lg-12">
             <article className="article-post">
-              <ReactMarkdown source={decodeURIComponent(page.content)} />
+              <ReactMarkdown components={CodeBlock}>{decodeURIComponent(page.content)}</ReactMarkdown>
             </article>
             {/*{config.subscription.enabled && <Subscription />}*/}
           </div>

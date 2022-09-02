@@ -6,12 +6,14 @@ import { Shop } from "@/core/models/shop";
 import { DigitalContent } from "@/core/models/digital_content";
 import React, { useEffect, useState } from "react";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import DigitalContentViewer from "../../components/content_viewer";
 
 const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
-  const [selectedContent, setSelectedContent] = useState(undefined);
   const [course, setCourse] = useState(null);
   const [digitalItems, setDigitalItems] = useState(null);
+  const alert = withReactContent(Swal);
 
   useEffect(() => {
     if (course !== null) {
@@ -44,7 +46,15 @@ const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
   };
 
   const showContentByType = (c: DigitalContent) => {
-    setSelectedContent(c);
+    alert.fire({
+      title: c.title,
+      html: <DigitalContentViewer content={c} />,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      showCloseButton: true,
+      width: "70%",
+      heightAuto: true
+    });
   };
 
   return (
@@ -61,8 +71,7 @@ const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
                 <div className="col-md-6 pt-6 pb-6 align-self-center">
                   <h1 className="secondfont mb-3 font-weight-bold">{course.name}</h1>
                   <ReactMarkdown
-                    source={decodeURIComponent(course.description).substring(0, 300)}
-                    className="mb-3" />
+                    className="mb-3">{decodeURIComponent(course.description).substring(0, 300)}</ReactMarkdown>
                   <br />
                   {course && course.attributes && course.attributes.map((a) => (
                     <>
@@ -88,8 +97,6 @@ const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
       {digitalItems && (
         <div className="container pt-4">
           <div className="row justify-content-between">
-            <DigitalContentViewer content={selectedContent} />
-
             <div className="col-md-12">
               <h5 className="font-weight-bold spanborder">
                 <span>All Topics</span>
@@ -108,7 +115,7 @@ const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
                         </span>
                         </h2>
 
-                        <ReactMarkdown source={decodeURIComponent(item.description)} />
+                        <ReactMarkdown>{decodeURIComponent(item.description)}</ReactMarkdown>
                         <small className="text-muted">
                           {item.contents.length} contents
                         </small>
@@ -118,8 +125,14 @@ const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
                           .map(content => (
                             <li style={{ listStyle: "none" }}>
                               <i className={getIconByType(content)} />&nbsp;&nbsp;
-                              <span className={"text-primary"}
-                                    onClick={() => showContentByType(content)}>{content.title}</span>
+                              {(content.contentType !== "Text" && content.contentType !== "Video") && (
+                                <a className={"text-primary"} target={"_blank"}
+                                   href={content.contentUrl}>{content.title}</a>
+                              )}
+                              {(content.contentType === "Text" || content.contentType === "Video") && (
+                                <span className={"text-primary"}
+                                      onClick={() => showContentByType(content)}>{content.title}</span>
+                              )}
                             </li>
                           ))}
                       </div>

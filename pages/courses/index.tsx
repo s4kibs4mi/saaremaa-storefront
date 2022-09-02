@@ -43,8 +43,8 @@ const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
               <div className="row justify-content-between">
                 <div className="col-md-6 pt-6 pb-6 align-self-center">
                   <h1 className="secondfont mb-3 font-weight-bold">{firstCourse.name}</h1>
-                  <ReactMarkdown source={decodeURIComponent(firstCourse.description).substring(0, 120)}
-                                 className="mb-3" />
+                  <ReactMarkdown
+                    className="mb-3">{decodeURIComponent(firstCourse.description).substring(0, 120)}</ReactMarkdown>
                   <span>
                     <a href={``} className="btn btn-white">
                       {(firstCourse.price / 100).toFixed(2)} {shop.currency}
@@ -88,7 +88,7 @@ const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
                         </a>
                       </Link>
                     </h2>
-                    <ReactMarkdown source={decodeURIComponent(course.description).substring(0, 200)} />
+                    <ReactMarkdown>{decodeURIComponent(course.description).substring(0, 200)}</ReactMarkdown>
                     <div className="card-text text-muted small">
                       {shop.name}
                     </div>

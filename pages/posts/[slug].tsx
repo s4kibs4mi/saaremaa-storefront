@@ -6,12 +6,14 @@ import { Shopemaa } from "@/core/shopemaa";
 import { Shop } from "@/core/models/shop";
 import { NotFound } from "@/components";
 import React from "react";
+import CodeBlock from "../../components/codeblock";
 
 const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
   if (post === null) {
     return <NotFound shop={shop} />;
   }
 
+  // @ts-ignore
   return (
     <>
       <Head>
@@ -44,7 +46,7 @@ const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
                   {/*</Link>*/}
                 </p>
                 <h1 className="display-4 secondfont mb-3 font-weight-bold">{post.title}</h1>
-                <ReactMarkdown source={decodeURIComponent(post.content).substring(0, 120)} className="mb-3" />
+                <ReactMarkdown className="mb-3">{decodeURIComponent(post.content).substring(0, 120)}</ReactMarkdown>
                 <div className="d-flex align-items-center">
                   <img
                     className="rounded-circle"
@@ -96,7 +98,7 @@ const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
           </div>
           <div className="col-md-12 col-lg-8">
             <article className="article-post">
-              <ReactMarkdown source={decodeURIComponent(post.content)} />
+              <ReactMarkdown components={CodeBlock}>{decodeURIComponent(post.content)}</ReactMarkdown>
             </article>
             {/*{config.subscription.enabled && <Subscription />}*/}
           </div>

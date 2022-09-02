@@ -12,6 +12,9 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { NotFound } from "@/components";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 const CourseDetails = ({
                          shop,
                          course
@@ -25,9 +28,9 @@ const CourseDetails = ({
   }
 
   const router = useRouter();
-  const [selectedContent, setSelectedContent] = useState(undefined);
   const [buyDisabled, setBuyDisabled] = useState(false);
   const [purchasedInfo, setPurchasedInfo] = useState(null);
+  const alert = withReactContent(Swal);
 
   useEffect(() => {
     if (purchasedInfo !== null) {
@@ -56,7 +59,15 @@ const CourseDetails = ({
       return;
     }
 
-    setSelectedContent(c);
+    alert.fire({
+      title: c.title,
+      html: <DigitalContentViewer content={c} />,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      showCloseButton: true,
+      width: "70%",
+      heightAuto: true
+    });
   };
 
   const onBuy = () => {
@@ -112,8 +123,8 @@ const CourseDetails = ({
               <div className="row justify-content-between">
                 <div className="col-md-6 pt-6 pb-6 align-self-center">
                   <h1 className="secondfont mb-3 font-weight-bold">{course.name}</h1>
-                  <ReactMarkdown source={decodeURIComponent(course.description).substring(0, 120)}
-                                 className="mb-3" />
+                  <ReactMarkdown
+                    className="mb-3">{decodeURIComponent(course.description).substring(0, 120)}</ReactMarkdown>
                   {purchasedInfo && !purchasedInfo.isPurchased && (
                     <>
                       <span>
@@ -139,7 +150,7 @@ const CourseDetails = ({
                   <br />
                   {course && course.attributes && course.attributes.map((a) => (
                     <>
-                      <a className={"text-secondary mt-5"}>{`[${a.name}: ${a.values[0]}]`}</a>&nbsp;
+                      <a key={a.name} className={"text-secondary mt-5"}>{`[${a.name}: ${a.values[0]}]`}</a>&nbsp;
                     </>
                   ))}
                 </div>
@@ -160,8 +171,6 @@ const CourseDetails = ({
 
       <div className="container pt-4">
         <div className="row justify-content-between">
-          <DigitalContentViewer content={selectedContent} />
-
           <div className="col-md-12">
             <h5 className="font-weight-bold spanborder">
               <span>All Topics</span>
@@ -180,7 +189,7 @@ const CourseDetails = ({
                         </span>
                       </h2>
 
-                      <ReactMarkdown source={decodeURIComponent(item.description)} />
+                      <ReactMarkdown>{decodeURIComponent(item.description)}</ReactMarkdown>
                       <small className="text-muted">
                         {item.contents.length} contents
                       </small>
@@ -188,12 +197,18 @@ const CourseDetails = ({
                       {item.contents.length > 0 && item.contents
                         .sort((a, b) => a.position - b.position)
                         .map(content => (
-                          <li style={{ listStyle: "none" }}>
+                          <li style={{ listStyle: "none" }} key={content.id}>
                             <i className={getIconByType(content)} />&nbsp;&nbsp;
                             {content.isTrialAllowed ? <i className={"fa fa-unlock"} /> : <i
                               className={"fa fa-lock"} />}&nbsp;&nbsp;
-                            <span className={"text-primary"}
-                                  onClick={() => showContentByType(content)}>{content.title}</span>
+                            {(content.contentType !== "Text" && content.contentType !== "Video") && (
+                              <a className={"text-primary"} target={"_blank"}
+                                 href={content.contentUrl}>{content.title}</a>
+                            )}
+                            {(content.contentType === "Text" || content.contentType === "Video") && (
+                              <span className={"text-primary"}
+                                    onClick={() => showContentByType(content)}>{content.title}</span>
+                            )}
                           </li>
                         ))}
                     </div>
