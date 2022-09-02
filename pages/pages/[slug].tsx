@@ -6,7 +6,8 @@ import { Shop } from "@/core/models/shop";
 import { NotFound } from "@/components";
 import React from "react";
 import { PageModel } from "@/core/models/page";
-import CodeBlock from "../../components/codeblock";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 const Page = ({ shop, page }: { page: PageModel, shop: Shop }) => {
   if (page === null) {
@@ -48,7 +49,25 @@ const Page = ({ shop, page }: { page: PageModel, shop: Shop }) => {
         <div className="row justify-content-center">
           <div className="col-md-12 col-lg-12">
             <article className="article-post">
-              <ReactMarkdown components={CodeBlock}>{decodeURIComponent(page.content)}</ReactMarkdown>
+              <ReactMarkdown className={"col-12 col-md-12"}
+                             components={{
+                               code({ node, inline, className, children, ...props }) {
+                                 const match = /language-(\w+)/.exec(className || "");
+                                 return !inline && match ? (
+                                   <SyntaxHighlighter
+                                     children={String(children).replace(/\n$/, "")}
+                                     style={dracula}
+                                     language={match[1]}
+                                     PreTag="div"
+                                     {...props}
+                                   />
+                                 ) : (
+                                   <code className={className} {...props}>
+                                     {children}
+                                   </code>
+                                 );
+                               }
+                             }}>{decodeURIComponent(page.content)}</ReactMarkdown>
             </article>
             {/*{config.subscription.enabled && <Subscription />}*/}
           </div>

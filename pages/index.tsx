@@ -39,7 +39,8 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
               <div className="row justify-content-between">
                 <div className="col-md-6 pt-6 pb-6 align-self-center">
                   <h1 className="secondfont mb-3 font-weight-bold">{firstPost.title}</h1>
-                  <ReactMarkdown source={decodeURIComponent(firstPost.content).substring(0, 120)} className="mb-3" />
+                  <ReactMarkdown
+                    className="mb-3">{decodeURIComponent(firstPost.content).substring(0, 120)}</ReactMarkdown>
                   <Link href={`/posts/${firstPost.slug}`}>
                     <a href={`/posts/${firstPost.slug}`} className="btn btn-dark">
                       Read More
@@ -77,7 +78,7 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
                         </a>
                       </Link>
                     </h2>
-                    <ReactMarkdown source={decodeURIComponent(post.content).substring(0, 200)} />
+                    <ReactMarkdown>{decodeURIComponent(post.content).substring(0, 200)}</ReactMarkdown>
                     <div className="card-text text-muted small">
                       {shop.name}
                     </div>
