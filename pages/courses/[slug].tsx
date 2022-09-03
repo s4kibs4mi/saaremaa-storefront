@@ -102,8 +102,7 @@ const CourseDetails = ({
         <title>{course.name} - {shop.name}</title>
 
         <meta property="og:title" content={`${course.name} - ${shop.name}`} />
-        {/*<meta property="og:site_name" content={config.domain} />*/}
-        {/*<meta property="og:url" content={`https://${config.domain}/post/${post.slug}`} />*/}
+        <link rel="icon" type="image/x-icon" href={shop.logo} />
         <meta property="og:type" content="website" />
         <meta property="og:image"
               content={course.fullImages && course.fullImages.length > 0 ? course.fullImages[0] : ""} />

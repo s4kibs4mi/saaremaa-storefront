@@ -30,6 +30,7 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
     <>
       <Head>
         <title>{shop.name} - {shop.title}</title>
+        <link rel="icon" type="image/x-icon" href={shop.logo} />
       </Head>
 
       {firstPost && (

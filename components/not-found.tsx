@@ -5,6 +5,7 @@ export const NotFound = ({ shop }) => (
   <>
     <Head>
       <title>{shop.name}</title>
+      <link rel="icon" type="image/x-icon" href={shop.logo} />
     </Head>
     <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
       <h1 className="mr-3 pr-3 align-top border-right inline-block align-content-center">404</h1>

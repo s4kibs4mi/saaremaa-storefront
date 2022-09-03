@@ -34,6 +34,7 @@ const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
     <>
       <Head>
         <title>Courses - {shop.name}</title>
+        <link rel="icon" type="image/x-icon" href={shop.logo} />
       </Head>
 
       {firstCourse && (

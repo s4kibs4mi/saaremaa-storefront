@@ -61,6 +61,7 @@ const MyCourse = ({ shop, orderHash }: { shop: Shop, orderHash: string }) => {
     <>
       <Head>
         <title>{course ? course.name : "My Course"} - {shop.name}</title>
+        <link rel="icon" type="image/x-icon" href={shop.logo} />
       </Head>
 
       {course && (

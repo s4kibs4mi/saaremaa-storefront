@@ -40,6 +40,7 @@ const MyAccount = ({ shop }: { shop: Shop }) => {
     <>
       <Head>
         <title>My Account - {shop.name}</title>
+        <link rel="icon" type="image/x-icon" href={shop.logo} />
       </Head>
 
       <div className="container pt-4 mt-5">

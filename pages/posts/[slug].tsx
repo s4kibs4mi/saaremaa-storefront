@@ -21,9 +21,8 @@ const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
         <title>
           {post.title} - {shop.name}
         </title>
+        <link rel="icon" type="image/x-icon" href={shop.logo} />
         <meta property="og:title" content={`${post.title} - ${shop.name}`} />
-        {/*<meta property="og:site_name" content={config.domain} />*/}
-        {/*<meta property="og:url" content={`https://${config.domain}/post/${post.slug}`} />*/}
         <meta property="og:type" content="website" />
         <meta property="og:image" content={post.bannerImageFull} />
         <meta property="og:description" content={decodeURIComponent(post.content).substring(0, 120)} />
