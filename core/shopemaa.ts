@@ -190,12 +190,12 @@ export class Shopemaa {
   }
 
   blogPosts(currentPage, limit) {
-    let query = `query { blogPosts(sort: { by: CreatedAt direction: Desc }, pagination: { perPage: ${limit} page: ${currentPage} }, search: { query: "" filters: [] }) { id title slug bannerImage content tags isPublished isFeatured views favourites createdAt updatedAt comments { id content customer { email phone firstName lastName profilePicture } createdAt } } }`;
+    let query = `query { blogPosts(sort: { by: CreatedAt direction: Desc }, pagination: { perPage: ${limit} page: ${currentPage} }, search: { query: "" filters: [] }) { id title slug bannerImageFull content tags isPublished isFeatured views favourites createdAt updatedAt comments { id content customer { email phone firstName lastName profilePicture } createdAt } } }`;
     return this._send_request(query);
   }
 
   blogPostBySlug(slug) {
-    let query = `query { blogPostBySlug(slug: "${slug}")  { id title slug bannerImage content tags isPublished isFeatured views favourites createdAt updatedAt comments { id content customer { email phone firstName lastName profilePicture } createdAt } } }`;
+    let query = `query { blogPostBySlug(slug: "${slug}")  { id title slug bannerImageFull content tags isPublished isFeatured views favourites createdAt updatedAt comments { id content customer { email phone firstName lastName profilePicture } createdAt } } }`;
     return this._send_request(query);
   }
 
