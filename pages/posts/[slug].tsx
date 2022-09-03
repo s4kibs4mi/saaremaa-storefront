@@ -25,11 +25,11 @@ const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
         {/*<meta property="og:site_name" content={config.domain} />*/}
         {/*<meta property="og:url" content={`https://${config.domain}/post/${post.slug}`} />*/}
         <meta property="og:type" content="website" />
-        <meta property="og:image" content={post.bannerImage} />
+        <meta property="og:image" content={post.bannerImageFull} />
         <meta property="og:description" content={decodeURIComponent(post.content).substring(0, 120)} />
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={decodeURIComponent(post.content).substring(0, 120)} />
-        <meta name="twitter:image" content={post.bannerImage} />
+        <meta name="twitter:image" content={post.bannerImageFull} />
         <meta name="twitter:card" content="summary_large_image"></meta>
         <script async src="//static.addtoany.com/menu/page.js"></script>
       </Head>
@@ -67,7 +67,7 @@ const Post = ({ shop, post }: { post: PostModel, shop: Shop }) => {
               </div>
               <div className="col-md-6 pr-0">
                 <img
-                  src={post.bannerImage}
+                  src={post.bannerImageFull}
                   style={{ objectFit: "cover", height: "100%", width: "100%" }}
                   alt={post.title}
                 />

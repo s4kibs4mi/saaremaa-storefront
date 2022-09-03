@@ -50,7 +50,7 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
                 <div
                   className="col-md-6 d-none d-md-block pr-0"
                   style={{
-                    backgroundImage: `url(${firstPost.bannerImage})`,
+                    backgroundImage: `url(${firstPost.bannerImageFull})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center center"
                   }}
@@ -86,7 +86,7 @@ const Home = ({ posts, shop }: { posts: Post[], shop: Shop }) => {
                       {post.createdAt} &middot; {(decodeURIComponent(post.content).length / 300).toFixed(0)} mins
                     </small>
                   </div>
-                  <img height="120" src={post.bannerImage} alt={post.title} />
+                  <img height="120" src={post.bannerImageFull} alt={post.title} />
                 </div>
               );
             })}

@@ -1,7 +1,7 @@
 export interface Post {
   title: string;
   slug: string;
-  bannerImage: string;
+  bannerImageFull: string;
   content: string;
   createdAt: string;
 }
