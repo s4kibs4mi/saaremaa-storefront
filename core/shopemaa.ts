@@ -204,8 +204,8 @@ export class Shopemaa {
     return this._send_request(query);
   }
 
-  sendMagicLoginRequest(email) {
-    let url = "http://localhost:3000/magic?token=%s";
+  sendMagicLoginRequest(email, url) {
+    url = `${url}magic?token=%s`;
     let query = `mutation { customerMagicLoginRequest(params: { email: "${email}" storefrontUrl: "${url}" }) }`;
     return this._send_request(query);
   }

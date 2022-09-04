@@ -22,7 +22,7 @@ const Login = ({ shop }: { shop: Shop }) => {
   const router = useRouter();
 
   const onLogin = () => {
-    Shopemaa.Api().sendMagicLoginRequest(loginParams.email).then(res => {
+    Shopemaa.Api().sendMagicLoginRequest(loginParams.email, location.href.replace("login", "")).then(res => {
       if (res.data.data) {
         setAlert({
           class: "success",
