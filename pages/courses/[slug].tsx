@@ -123,8 +123,8 @@ const CourseDetails = ({
                 <div className="col-md-6 pt-6 pb-6 align-self-center">
                   <h1 className="secondfont mb-3 font-weight-bold">{course.name}</h1>
                   <ReactMarkdown
-                    className="mb-3">{decodeURIComponent(course.description).substring(0, 120)}</ReactMarkdown>
-                  {purchasedInfo && !purchasedInfo.isPurchased && (
+                    className="mb-3">{decodeURIComponent(course.description)}</ReactMarkdown>
+                  {(purchasedInfo === null || !purchasedInfo.isPurchased) && (
                     <>
                       <span>
                     <a href={``} className="btn btn-white">
@@ -135,7 +135,8 @@ const CourseDetails = ({
                               className="btn btn-dark">{course.price === 0 ? "Enroll" : "Buy"}</button>
                     </>
                   )}
-                  {purchasedInfo && purchasedInfo.isPurchased && (
+
+                  {(purchasedInfo && purchasedInfo.isPurchased) && (
                     <>
                       <span>
                     <Link href={`/my-courses/${purchasedInfo.orderHash}`}>
@@ -146,12 +147,6 @@ const CourseDetails = ({
                   </span>
                     </>
                   )}
-                  <br />
-                  {course && course.attributes && course.attributes.map((a) => (
-                    <>
-                      <a key={a.name} className={"text-secondary mt-5"}>{`[${a.name}: ${a.values[0]}]`}</a>&nbsp;
-                    </>
-                  ))}
                 </div>
 
                 <div

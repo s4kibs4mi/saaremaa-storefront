@@ -48,7 +48,7 @@ const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
                     className="mb-3">{decodeURIComponent(firstCourse.description).substring(0, 120)}</ReactMarkdown>
                   <span>
                     <a href={``} className="btn btn-white">
-                      {(firstCourse.price / 100).toFixed(2)} {shop.currency}
+                      {firstCourse.price === 0 ? "Free" : `${(firstCourse.price / 100).toFixed(2)} ${shop.currency}`}
                     </a>
                   </span>&nbsp;
 
@@ -74,35 +74,41 @@ const Courses = ({ courses, shop }: { courses: Course[], shop: Shop }) => {
 
       <div className="container pt-4">
         <div className="row justify-content-between">
-          <div className="col-md-12">
-            <h5 className="font-weight-bold spanborder">
-              <span>All Courses</span>
-            </h5>
-            {courses.map((course) => {
-              return (
-                <div key={course.slug} className="mb-3 d-flex justify-content-between">
-                  <div className="pr-3">
-                    <h2 className="mb-1 h4 font-weight-bold">
-                      <Link href={`/courses/${course.slug}`}>
-                        <a href={`/courses/${course.slug}`} className="text-dark">
-                          {course.name}
-                        </a>
-                      </Link>
-                    </h2>
-                    <ReactMarkdown>{decodeURIComponent(course.description).substring(0, 200)}</ReactMarkdown>
-                    <div className="card-text text-muted small">
-                      {shop.name}
-                    </div>
-                    <small className="text-muted">
+          {courses && courses.length > 0 && (
+            <div className="col-md-12">
+              <h5 className="font-weight-bold spanborder">
+                <span>All Courses</span>
+              </h5>
+              {courses.map((course) => {
+                return (
+                  <div key={course.slug} className="mb-3 d-flex justify-content-between">
+                    <div className="pr-3">
+                      <h2 className="mb-1 h4 font-weight-bold">
+                        <Link href={`/courses/${course.slug}`}>
+                          <a href={`/courses/${course.slug}`} className="text-dark">
+                            {course.name}
+                          </a>
+                        </Link>
+                      </h2>
+                      <ReactMarkdown>{decodeURIComponent(course.description).substring(0, 200)}</ReactMarkdown>
+                      <div className="card-text text-muted small">
+                        {shop.name}
+                      </div>
+                      <small className="text-muted">
                       <span
                         className={"text-danger"}>{course.price === 0 ? "Free" : `${(course.price / 100).toFixed(2)} ${shop.currency}`}</span> &middot; {course.createdAt} &middot; {course.digitalItems.length} topics
-                    </small>
+                      </small>
+                    </div>
+                    <img height="120" src={course.fullImages.length > 0 ? course.fullImages[0] : ""}
+                         alt={course.name} />
                   </div>
-                  <img height="120" src={course.fullImages.length > 0 ? course.fullImages[0] : ""} alt={course.name} />
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
+          {courses && courses.length === 0 && (
+            <h3>No course found</h3>
+          )}
         </div>
 
         {!hideLoadMore && (
