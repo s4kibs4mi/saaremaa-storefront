@@ -87,7 +87,12 @@ const Checkout = ({
         return;
       }
 
-      Shopemaa.Api().generate_payment_nonce_for_guest_checkout(cart.id, customer.email).then(async nonceResp => {
+      let overrides = {
+        SuccessCallback: window.location.href,
+        FailureCallback: window.location.href
+      };
+
+      Shopemaa.Api().generate_payment_nonce_for_guest_checkout(cart.id, customer.email, overrides).then(async nonceResp => {
         if (nonceResp.data.data.orderGeneratePaymentNonceForGuest === null) {
           setDisableCompletePurchase(false);
           return;
