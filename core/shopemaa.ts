@@ -155,7 +155,7 @@ export class Shopemaa {
   }
 
   generate_payment_nonce_for_guest_checkout(orderId, customerEmail, overrides) {
-    let query = `mutation { orderGeneratePaymentNonceForGuest(orderId: "${orderId}", customerEmail: "${customerEmail}, overrides: ${overrides}") { PaymentGatewayName Nonce StripePublishableKey } }`;
+    let query = `mutation { orderGeneratePaymentNonceForGuest(orderId: "${orderId}", customerEmail: "${customerEmail}, overrides: { SuccessCallback: "${overrides.SuccessCallback}" FailureCallback: "${overrides.FailureCallback}" }) { PaymentGatewayName Nonce StripePublishableKey } }`;
     return this._send_request(query);
   }
 
